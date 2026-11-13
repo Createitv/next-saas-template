@@ -1,8 +1,9 @@
 import * as Sentry from '@sentry/nextjs';
+import { Env } from './libs/Env';
 
 const sentryOptions: Sentry.NodeOptions | Sentry.EdgeOptions = {
   // Sentry DSN
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  dsn: Env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Enable Spotlight in development
   spotlight: process.env.NODE_ENV === 'development',
@@ -11,11 +12,12 @@ const sentryOptions: Sentry.NodeOptions | Sentry.EdgeOptions = {
     Sentry.consoleLoggingIntegration(),
   ],
 
-  // Adds request headers and IP for users, for more info visit
-  sendDefaultPii: true,
+  // Privacy: sending IPs and request headers to a third party must be an
+  // explicit opt-in, not a template default.
+  sendDefaultPii: false,
 
-  // Adjust this value in production, or use tracesSampler for greater control
-  tracesSampleRate: 1,
+  // Sample 10% of transactions by default; raise it locally while debugging.
+  tracesSampleRate: Env.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE,
 
   // Enable logs to be sent to Sentry
   enableLogs: true,

@@ -30,9 +30,12 @@ export default defineConfig<ChromaticConfig>({
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
   webServer: {
+    // On CI (Linux) pglite-server orchestrates the subprocess directly.
+    // Locally (especially on Windows) we use the cross-platform orchestrator
+    // script: cmd.exe strips single quotes and pglite-server cannot spawn npm.
     command: process.env.CI
       ? 'pglite-server -m 100 --run \'run-s db:migrate start\''
-      : 'pglite-server -m 100 --run \'run-s db:migrate dev:next\'',
+      : 'node scripts/dev.mjs',
     url: baseURL,
     timeout: 60 * 1000,
     reuseExistingServer: !process.env.CI,
@@ -42,6 +45,7 @@ export default defineConfig<ChromaticConfig>({
       NEXT_PUBLIC_SENTRY_DISABLED: 'true',
       NEXT_PUBLIC_APP_URL: baseURL,
       PORT,
+      SPOTLIGHT_DISABLED: 'true',
     },
   },
 

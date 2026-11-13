@@ -4,6 +4,49 @@ import { withSentryConfig } from '@sentry/nextjs';
 import createNextIntlPlugin from 'next-intl/plugin';
 import './src/libs/Env';
 
+// Security headers applied to every response.
+// The CSP is intentionally permissive enough for Clerk + Next.js dev mode;
+// tighten 'unsafe-inline' / 'unsafe-eval' once you audit your own scripts.
+const securityHeaders = [
+  {
+    key: 'Content-Security-Policy',
+    value: [
+      'default-src \'self\'',
+      'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://*.clerk.accounts.dev https://*.clerk.com',
+      'style-src \'self\' \'unsafe-inline\'',
+      'img-src \'self\' data: blob: https://img.clerk.com',
+      'font-src \'self\' data:',
+      'connect-src \'self\' https://*.clerk.accounts.dev https://*.clerk.com https://*.sentry.io https://*.ingest.sentry.io',
+      'frame-src \'self\' https://*.clerk.accounts.dev https://*.clerk.com',
+      'worker-src \'self\' blob:',
+      'frame-ancestors \'none\'',
+      'base-uri \'self\'',
+      'form-action \'self\'',
+      'object-src \'none\'',
+    ].join('; '),
+  },
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload',
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'DENY',
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+  {
+    key: 'Referrer-Policy',
+    value: 'strict-origin-when-cross-origin',
+  },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=()',
+  },
+];
+
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
   devIndicators: {
@@ -17,6 +60,14 @@ const baseConfig: NextConfig = {
   },
   outputFileTracingIncludes: {
     '/': ['./migrations/**/*'],
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ];
   },
 };
 

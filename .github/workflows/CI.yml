@@ -110,6 +110,8 @@ jobs:
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v6
+        # Skip gracefully when Codecov is not configured for this fork
+        if: secrets.CODECOV_TOKEN != ''
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -164,11 +166,14 @@ jobs:
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
 
       - name: Fix test results permission # Give permissions to test results needed by Chromatic
+        if: failure()
         run: |
           sudo chmod -R 777 test-results
 
       - name: Run visual regression tests
         uses: chromaui/action@v17
+        # Skip gracefully when Chromatic is not configured for this fork
+        if: secrets.CHROMATIC_PROJECT_TOKEN != ''
         with:
           playwright: true
           exitOnceUploaded: true # Speed up by skipping the build results
@@ -188,7 +193,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    if: github.event_name == 'pull_request'
+    # Skip gracefully when Crowdin is not configured for this fork
+    if: github.event_name == 'pull_request' && secrets.CROWDIN_PROJECT_ID != '' && secrets.CROWDIN_PERSONAL_TOKEN != ''
 
     steps:
       - uses: actions/checkout@v6

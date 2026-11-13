@@ -23,7 +23,8 @@ const FreePlan: PricingPlan = {
 const PaidPlans: PricingPlan[] = [
   {
     name: PLAN_NAME.PREMIUM,
-    price: 79, // Due to bugs in Alchemy.run, use a new `lookupKey` when changing price
+    // FIXME: Wire these plans to your billing provider (e.g. Stripe price ids)
+    price: 79,
     limits: {
       teamMember: 5,
       website: 5,
@@ -33,7 +34,7 @@ const PaidPlans: PricingPlan[] = [
   },
   {
     name: PLAN_NAME.ENTERPRISE,
-    price: 199, // Due to bugs in Alchemy.run, use a new `lookupKey` when changing price
+    price: 199,
     limits: {
       teamMember: 100,
       website: 100,

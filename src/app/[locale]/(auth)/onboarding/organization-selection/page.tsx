@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { OrganizationList } from '@clerk/nextjs';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getI18nPath } from '@/utils/Helpers';
 
 type OrganizationSelectionProps = {
   params: Promise<{ locale: string }>;
@@ -26,8 +27,8 @@ export default async function OrganizationSelectionPage(props: OrganizationSelec
   return (
     <div className="flex min-h-screen items-center justify-center">
       <OrganizationList
-        afterSelectOrganizationUrl="/dashboard"
-        afterCreateOrganizationUrl="/dashboard"
+        afterSelectOrganizationUrl={getI18nPath('/dashboard', locale)}
+        afterCreateOrganizationUrl={getI18nPath('/dashboard', locale)}
         hidePersonal
         skipInvitationScreen
       />

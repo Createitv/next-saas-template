@@ -74,33 +74,22 @@ export const Footer = () => {
         )}
         legalLinks={(
           <>
+            {/* FIXME: Create real /terms and /privacy pages before going live */}
             <li>
-              <Link href="/sign-up">{t('terms_of_service')}</Link>
+              <a href="#">{t('terms_of_service')}</a>
             </li>
             <li>
-              <Link href="/sign-up">{t('privacy_policy')}</Link>
+              <a href="#">{t('privacy_policy')}</a>
             </li>
           </>
         )}
       >
         <li>
-          <Link href="/sign-up">{t('product')}</Link>
+          <a href="#features">{t('product')}</a>
         </li>
 
         <li>
-          <Link href="/sign-up">{t('docs')}</Link>
-        </li>
-
-        <li>
-          <Link href="/sign-up">{t('blog')}</Link>
-        </li>
-
-        <li>
-          <Link href="/sign-up">{t('community')}</Link>
-        </li>
-
-        <li>
-          <Link href="/sign-up">{t('company')}</Link>
+          <a href="#pricing">{t('pricing')}</a>
         </li>
       </CenteredFooter>
     </Section>

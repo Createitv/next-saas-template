@@ -34,7 +34,15 @@ export default defineConfig({
             provider: playwright(),
             screenshotDirectory: 'vitest-test-results',
             instances: [
-              { browser: 'chromium' },
+              {
+                browser: 'chromium',
+                // Opt-in escape hatch for machines where the exact Playwright
+                // browser build is unavailable (e.g. slow CDN): point
+                // CHROMIUM_EXECUTABLE_PATH to any local Chrome/Chromium binary.
+                ...(process.env.CHROMIUM_EXECUTABLE_PATH
+                  ? { launch: { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH } }
+                  : {}),
+              },
             ],
           },
         },

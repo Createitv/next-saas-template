@@ -34,7 +34,7 @@ Setup and verification commands are hard gates. Do not continue to mapping or im
 
 - Use the verified clone as the source of truth. Inspect current files before making claims or edits.
 - Keep changes minimal. Do not reformat unrelated files.
-- Do not change these: `src/components/DemoBadge.tsx`, its `DemoBadge` usage in `src/app/[locale]/layout.tsx`, or `src/app/[locale]/(auth)/dashboard/page.tsx`.
+- Never weaken the auth architecture: keep `ClerkProvider` in `src/app/[locale]/layout.tsx` and the global clerk middleware in `src/proxy.ts` intact.
 - Use marketing routes only for promotional content.
 - Treat landing and marketing page adaptation as part of every SaaS implementation unless the user explicitly scopes it out.
 - Build product workflows as dedicated authenticated dashboard feature pages, not in the dashboard index: use `src/app/[locale]/(auth)/dashboard/<feature>/page.tsx` for CRUD, data entry, tools, and customer-specific views.
@@ -49,6 +49,8 @@ Setup and verification commands are hard gates. Do not continue to mapping or im
 - Follow nearby style and import conventions.
 - Run `npm run db:generate` whenever `src/models/Schema.ts` changes.
 - Persist product data in the database, not in local state or memory. Use Drizzle ORM for all database access.
+- Authorization is mandatory: call `requireSession()` or `requireOrg()` from `src/libs/Authz.ts` at the top of every Server Component that renders protected data, every Server Action, and every Route Handler. The middleware is not an authorization boundary for data access.
+- Multi-tenancy: `orgId` (the Clerk organization id from `requireOrg()`) is the tenant key. Every tenant-owned table gets an `orgId` column, an index on it, and queries scoped with `.where(eq(table.orgId, orgId))`. Unique constraints must include `orgId`.
 - Make new components visually polished and consistent with the current UI: reuse existing Shadcn/Radix primitives, Tailwind tokens, spacing, typography, states, and responsive patterns before introducing new visual treatments.
 - Use shadcn/ui theme tokens for UI colors; change colors only in `src/styles/global.css`, not locally in components.
 - React Compiler is enabled, so don't add `useMemo` or `useCallback`.
@@ -82,7 +84,7 @@ Use these as starting search targets:
 ## Mapping Heuristics
 
 - Use a tenant only for the top-level organization a user can join and switch between, where membership, permissions, billing, collaboration, or data isolation are scoped.
-- Model sub-entities as Drizzle records scoped by a single `ownerId` field.
+- Model sub-entities as Drizzle records scoped by the organization (`orgId`), plus an `ownerId` only when the record belongs to a specific user within the organization.
 - Prefer existing Clerk and boilerplate features before custom flows.
 
 ## Workflow

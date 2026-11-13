@@ -7,16 +7,12 @@
     "sign_in": "Se connecter",
     "sign_up": "S'inscrire",
     "product": "Produit",
-    "pricing": "Tarifs",
-    "docs": "Docs",
-    "blog": "Blog",
-    "about": "À propos"
+    "pricing": "Tarifs"
   },
   "LocaleSwitcher": {
     "button_label": "Changer de langue"
   },
   "Hero": {
-    "follow_twitter": "Suivez @Ixartz sur Twitter",
     "title": "Le parfait <important>SaaS template</important> pour construire et mettre à l'échelle votre entreprise en toute simplicité.",
     "description": "Un template gratuit et open-source de landing page pour votre entreprise SaaS, construit avec React, TypeScript, Shadcn UI et Tailwind CSS.",
     "primary_button": "Obtenir Next.js SaaS Starter Kit",
@@ -60,15 +56,6 @@
     "feature_transfer": "{number} To de transfert",
     "feature_email_support": "Support par email"
   },
-  "SponsorLogos": {
-    "sponsored_by": "Sponsorisé par",
-    "clerk_logo": "Logo Clerk",
-    "sentry_logo": "Logo Sentry",
-    "crowdin_logo": "Logo Crowdin",
-    "arcjet_logo": "Logo Arcjet",
-    "coderabbit_logo": "Logo CodeRabbit",
-    "nextjs_boilerplate_logo": "Logo Next.js SaaS Boilerplate"
-  },
   "FAQ": {
     "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
     "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit."
@@ -80,10 +67,7 @@
   },
   "Footer": {
     "product": "Produit",
-    "docs": "Docs",
-    "blog": "Blog",
-    "community": "Communauté",
-    "company": "Entreprise",
+    "pricing": "Tarifs",
     "terms_of_service": "Conditions d'utilisation",
     "privacy_policy": "Politique de confidentialité",
     "footer_text": "© {year} {name}. Fait avec <author></author>."
@@ -105,15 +89,29 @@
   },
   "DashboardIndexPage": {
     "title_bar": "Tableau de bord",
-    "title_bar_description": "Bienvenue sur votre tableau de bord",
-    "message_state_title": "Commençons",
-    "message_state_description": "Personnalisez cette page en modifiant le fichier dans <code>dashboard/page.tsx</code>.",
-    "message_state_alternative": "Besoin de fonctionnalités avancées ? Next.js 16 & React 19, Multi-tenancy & Équipes, Rôles & Permissions, Shadcn UI,\nTypesafety de bout en bout avec oRPC, Paiement Stripe, Mode clair / sombre. Essayez <url></url>.",
-    "max_message": "Ou, besoin d'une stack d'auth auto-hébergée (Better Auth) ? Essayez <url></url>."
+    "title_bar_description": "Bienvenue dans l'espace {organization}",
+    "tenant_context_title": "Contexte du tenant",
+    "tenant_context_description": "Ces identifiants définissent la portée de chaque requête de base de données. Ils constituent la frontière entre les tenants.",
+    "next_steps_title": "Créez votre première fonctionnalité",
+    "next_steps_description": "Suivez ces étapes pour livrer votre première page de fonctionnalité.",
+    "next_steps_schema": "Définissez vos tables dans <code>src/models/Schema.ts</code> — chaque table possède une colonne orgId",
+    "next_steps_migrate": "Générez et appliquez la migration avec <code>npm run db:generate</code>",
+    "next_steps_authz": "Appelez <code>requireOrg()</code> au début de chaque Server Action et Route Handler",
+    "next_steps_page": "Créez votre page sous <code>dashboard/your-feature/page.tsx</code>"
   },
   "UserProfilePage": {
     "title_bar": "Profil utilisateur",
     "title_bar_description": "Afficher et gérer votre profil utilisateur"
+  },
+  "DashboardError": {
+    "title": "Une erreur est survenue",
+    "description": "Une erreur inattendue s'est produite lors du chargement de cette page.",
+    "retry": "Réessayer"
+  },
+  "NotFound": {
+    "title": "Page introuvable",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "back_home": "Retour à l'accueil"
   },
   "OrganizationProfilePage": {
     "title_bar": "Gestion de l’organisation",

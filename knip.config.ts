@@ -10,6 +10,8 @@ const config: KnipConfig = {
     'src/libs/Logger.ts',
     'src/types/Auth.ts',
     'src/utils/DBConnection.ts',
+    // Template API: exported for consumers of the starter kit, not used internally yet
+    'src/libs/Authz.ts',
   ],
   // Dependencies to ignore during analysis
   ignoreDependencies: [

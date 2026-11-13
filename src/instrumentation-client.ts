@@ -2,17 +2,20 @@
 // The added config here will be used whenever a users loads a page in their browser.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 import * as Sentry from '@sentry/nextjs';
+import { Env } from './libs/Env';
 
 if (!process.env.NEXT_PUBLIC_SENTRY_DISABLED) {
   Sentry.init({
-    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    dsn: Env.NEXT_PUBLIC_SENTRY_DSN,
 
     // Add optional integrations for additional features
     integrations: [
       Sentry.replayIntegration({
-        maskAllText: false,
-        maskAllInputs: false,
-        blockAllMedia: false,
+        // Privacy: mask user content in session replays by default.
+        // Unmask individual elements consciously if you need to.
+        maskAllText: true,
+        maskAllInputs: true,
+        blockAllMedia: true,
       }),
       Sentry.consoleLoggingIntegration(),
       Sentry.browserTracingIntegration(),
@@ -22,11 +25,12 @@ if (!process.env.NEXT_PUBLIC_SENTRY_DISABLED) {
         : []),
     ],
 
-    // Adds request headers and IP for users, for more info visit
-    sendDefaultPii: true,
+    // Privacy: sending IPs and request headers to a third party must be an
+    // explicit opt-in, not a template default.
+    sendDefaultPii: false,
 
-    // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-    tracesSampleRate: 1,
+    // Sample 10% of transactions by default; raise it locally while debugging.
+    tracesSampleRate: Env.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE,
 
     // Define how likely Replay events are sampled.
     // This sets the sample rate to be 10%. You may want this to be 100% while

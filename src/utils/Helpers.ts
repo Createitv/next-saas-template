@@ -10,11 +10,17 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Resolves the public base URL of the application.
- * @returns The configured public app URL or the local development URL.
+ * Priority: NEXT_PUBLIC_APP_URL, then the Vercel deployment URL, then localhost.
  */
 export const getBaseUrl = () => {
   if (Env.NEXT_PUBLIC_APP_URL) {
     return Env.NEXT_PUBLIC_APP_URL;
+  }
+
+  // Fallback for Vercel preview deployments where NEXT_PUBLIC_APP_URL is not set,
+  // so we never emit `localhost` into sitemaps / canonical URLs by accident.
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
   }
 
   return 'http://localhost:3000';

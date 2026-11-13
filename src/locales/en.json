@@ -7,16 +7,12 @@
     "sign_in": "Sign in",
     "sign_up": "Sign up",
     "product": "Product",
-    "pricing": "Pricing",
-    "docs": "Docs",
-    "blog": "Blog",
-    "about": "About"
+    "pricing": "Pricing"
   },
   "LocaleSwitcher": {
     "button_label": "Change language"
   },
   "Hero": {
-    "follow_twitter": "Follow @Ixartz on Twitter",
     "title": "The perfect <important>SaaS template</important> to build and scale your business with ease.",
     "description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
     "primary_button": "Get Next.js SaaS Starter Kit",
@@ -60,15 +56,6 @@
     "feature_transfer": "{number} TB of transfer",
     "feature_email_support": "Email support"
   },
-  "SponsorLogos": {
-    "sponsored_by": "Sponsored by",
-    "clerk_logo": "Clerk logo",
-    "sentry_logo": "Sentry logo",
-    "crowdin_logo": "Crowdin logo",
-    "arcjet_logo": "Arcjet logo",
-    "coderabbit_logo": "CodeRabbit logo",
-    "nextjs_boilerplate_logo": "Next.js SaaS Boilerplate logo"
-  },
   "FAQ": {
     "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
     "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit."
@@ -80,10 +67,7 @@
   },
   "Footer": {
     "product": "Product",
-    "docs": "Docs",
-    "blog": "Blog",
-    "community": "Community",
-    "company": "Company",
+    "pricing": "Pricing",
     "terms_of_service": "Terms Of Service",
     "privacy_policy": "Privacy Policy",
     "footer_text": "© {year} {name}. Made with <author></author>."
@@ -105,15 +89,29 @@
   },
   "DashboardIndexPage": {
     "title_bar": "Dashboard",
-    "title_bar_description": "Welcome to your dashboard",
-    "message_state_title": "Let's get started",
-    "message_state_description": "Customize this page by editing the file at <code>dashboard/page.tsx</code>.",
-    "message_state_alternative": "Need advanced features? Next.js 16 & React 19, Multi-tenancy & Teams, Roles & Permissions, Shadcn UI,\nEnd-to-End Typesafety with oRPC, Stripe Payment, Light / Dark mode. Try <url></url>.",
-    "max_message": "Or, need a Self-hosted auth stack (Better Auth)? Try <url></url>."
+    "title_bar_description": "Welcome to {organization}'s workspace",
+    "tenant_context_title": "Tenant context",
+    "tenant_context_description": "These identifiers scope every database query in your app. Treat them as the tenant boundary.",
+    "next_steps_title": "Build your first feature",
+    "next_steps_description": "Follow these steps to ship your first tenant-scoped feature page.",
+    "next_steps_schema": "Define your tables in <code>src/models/Schema.ts</code> — every tenant table gets an orgId column",
+    "next_steps_migrate": "Generate and apply the migration with <code>npm run db:generate</code>",
+    "next_steps_authz": "Call <code>requireOrg()</code> at the top of every Server Action and Route Handler",
+    "next_steps_page": "Create your feature page under <code>dashboard/your-feature/page.tsx</code>"
   },
   "UserProfilePage": {
     "title_bar": "User Profile",
     "title_bar_description": "View and manage your user profile"
+  },
+  "DashboardError": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred while loading this page.",
+    "retry": "Try again"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "back_home": "Back to home"
   },
   "OrganizationProfilePage": {
     "title_bar": "Organization Management",

@@ -20,6 +20,9 @@ const locales = [
 /** Centralized application configuration */
 export const AppConfig = {
   name: 'SaaS Template',
+  tagline: 'The perfect SaaS template to build and scale your business with ease',
+  description:
+    'A free and open-source SaaS starter kit, built with Next.js, React, TypeScript, Shadcn UI, and Tailwind CSS.',
   i18n: {
     locales,
     defaultLocale: 'en',

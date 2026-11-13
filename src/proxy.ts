@@ -1,4 +1,3 @@
-import type { NextFetchEvent, NextRequest } from 'next/server';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
@@ -6,6 +5,7 @@ import { routing } from './libs/I18nRouting';
 
 const handleI18nRouting = createMiddleware(routing);
 
+// Routes that require an authenticated session. Everything else is public.
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
   '/:locale/dashboard(.*)',
@@ -13,58 +13,62 @@ const isProtectedRoute = createRouteMatcher([
   '/:locale/onboarding(.*)',
 ]);
 
-const isAuthPage = createRouteMatcher([
-  '/sign-in(.*)',
-  '/:locale/sign-in(.*)',
-  '/sign-up(.*)',
-  '/:locale/sign-up(.*)',
+// The organization selection page is part of onboarding but must stay
+// accessible for users that are signed in without an organization yet.
+const isOrgSelectionRoute = createRouteMatcher([
+  '/onboarding/organization-selection',
+  '/:locale/onboarding/organization-selection',
 ]);
 
-export default async function proxy(
-  request: NextRequest,
-  event: NextFetchEvent,
-) {
-  // Clerk keyless mode doesn't work with i18n, this is why we need to run the middleware conditionally
-  if (
-    isAuthPage(request) || isProtectedRoute(request)
-  ) {
-    return clerkMiddleware(async (auth, req) => {
-      // Check if the current route is protected and requires authentication
-      // If user is not authenticated, redirect them to the sign-in page with proper locale
-      if (isProtectedRoute(req)) {
-        const locale = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
+const isDashboardRoute = createRouteMatcher([
+  '/dashboard(.*)',
+  '/:locale/dashboard(.*)',
+]);
 
-        const signInUrl = new URL(`${locale}/sign-in`, req.url);
+// Extract the locale prefix from a pathname, e.g. "/fr/dashboard" => "fr"
+const getLocale = (pathname: string) =>
+  pathname.match(new RegExp(`^/(${routing.locales.join('|')})(/|$)`))?.at(1)
+  ?? routing.defaultLocale;
 
-        await auth.protect({
-          unauthenticatedUrl: signInUrl.toString(),
-        });
-      }
+// Build a locale-aware path: the default locale has no prefix (as-needed mode)
+const toLocalePath = (path: string, locale: string) =>
+  locale === routing.defaultLocale ? path : `/${locale}${path}`;
 
-      const authObj = await auth();
+// Clerk middleware runs for every request so the auth state is available
+// on public pages too (e.g. to render a user menu in the navbar).
+export default clerkMiddleware(async (auth, req) => {
+  // Protect dashboard and onboarding routes, redirect to a locale-aware sign-in page
+  if (isProtectedRoute(req) && !isOrgSelectionRoute(req)) {
+    const locale = getLocale(req.nextUrl.pathname);
+    const signInUrl = new URL(toLocalePath('/sign-in', locale), req.url);
 
-      // Redirect authenticated users without an organization to the organization selection page
-      // This ensures users are properly associated with an organization before accessing the dashboard
-      if (
-        authObj.userId
-        && !authObj.orgId
-        && req.nextUrl.pathname.includes('/dashboard')
-        && !req.nextUrl.pathname.endsWith('/organization-selection')
-      ) {
-        const orgSelection = new URL(
-          '/onboarding/organization-selection',
-          req.url,
-        );
-
-        return NextResponse.redirect(orgSelection);
-      }
-
-      return handleI18nRouting(req);
-    })(request, event);
+    await auth.protect({
+      unauthenticatedUrl: signInUrl.toString(),
+    });
   }
 
-  return handleI18nRouting(request);
-}
+  // Redirect authenticated users without an organization to the organization
+  // selection page. This ensures users are properly associated with an
+  // organization before accessing the dashboard.
+  const authObj = await auth();
+
+  if (
+    authObj.userId
+    && !authObj.orgId
+    && isDashboardRoute(req)
+    && !isOrgSelectionRoute(req)
+  ) {
+    const locale = getLocale(req.nextUrl.pathname);
+    const orgSelection = new URL(
+      toLocalePath('/onboarding/organization-selection', locale),
+      req.url,
+    );
+
+    return NextResponse.redirect(orgSelection);
+  }
+
+  return handleI18nRouting(req);
+});
 
 export const config = {
   // Match all pathnames except for

@@ -10,6 +10,11 @@ const betterStackSink: AsyncSink = async (record) => {
       'Authorization': `Bearer ${Env.NEXT_PUBLIC_BETTER_STACK_SOURCE_TOKEN}`,
     },
     body: JSON.stringify(record),
+    // Never let a log shipper hang the request path
+    signal: AbortSignal.timeout(3000),
+  }).catch((error: unknown) => {
+    // Sink errors must never break the app; log to console as last resort
+    console.error(`Better Stack logging failed: ${error instanceof Error ? error.message : String(error)}`);
   });
 };
 
